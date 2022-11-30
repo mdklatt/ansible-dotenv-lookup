@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Sequence
 
-from ansible.errors import AnsibleLookupError
+from ansible.errors import AnsibleFileNotFound, AnsibleLookupError
 from ansible.plugins.lookup import LookupBase
 from re import compile
 
@@ -38,7 +38,7 @@ DOCUMENTATION = """
       required: True
     file:
       description: Path to the dotenv file.
-      default: '.env'    
+      default: '.env'
 """  # YAML
 
 
@@ -79,6 +79,8 @@ class LookupModule(LookupBase):  # class name is not arbitrary, DO NOT CHANGE
         self.set_options(var_options=variables, direct=options)
         params = self.get_options()
         path = self.find_file_in_search_path(variables, "files", params["file"])
+        if not path:
+            raise AnsibleFileNotFound(f"Could not find file {params['file']}")
         var_pattern = compile(r"^\s*([a-zA-Z_]+[a-zA-Z0-9_]*)\s*=\s*(\S*)")
         variables = {}
         for line in open(path, "rt").readlines():

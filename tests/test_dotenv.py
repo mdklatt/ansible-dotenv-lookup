@@ -6,7 +6,7 @@ The script can be executed on its own or incorporated into a larger test suite.
 from os import getcwd
 
 import pytest
-from ansible.errors import AnsibleLookupError
+from ansible.errors import AnsibleFileNotFound, AnsibleLookupError
 from ansible.parsing.dataloader import DataLoader
 from ansible.plugins.loader import lookup_loader
 
@@ -50,12 +50,21 @@ def test_lookup(plugin, dotenv, variables):
     return
 
 
-def test_lookup_fail(plugin, dotenv, variables):
-    """ Test value lookup for an unknown variable.
+def test_lookup_no_name(plugin, dotenv, variables):
+    """ Test value lookup for an nonexistent variable.
 
     """
     with pytest.raises(AnsibleLookupError):
         plugin.run(["VAR0"], variables, file=dotenv)
+    return
+
+
+def test_lookup_no_file(plugin, dotenv, variables):
+    """ Test value lookup for an nonexistent variable.
+
+    """
+    with pytest.raises(AnsibleFileNotFound):
+        plugin.run(["VAR1"], variables, file="none")
     return
 
 
