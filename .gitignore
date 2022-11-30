@@ -1,0 +1,38 @@
+# Ignore local Python envrionments.
+
+.python-version
+.venv*/
+
+
+# Ignore Python build artifacts.
+
+*.egg-info/
+*.pyc
+*.pyo
+
+
+# Ignore pytest cache files. This has to be at the project root instead of
+# under tests/ because of the way the tests invoke Ansible.
+
+.pytest_cache/
+
+
+# Ignore Make artifacts.
+
+**/.make-update
+
+
+# Ignore settings for various IDEs.
+
+.idea/
+.project/
+.pydevproject/
+.vscode/
+nbproject/
+*.code-workspace
+
+
+# Ignore OS metadata files.
+
+.DS_Store
+Thumbs.db
